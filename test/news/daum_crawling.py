@@ -3,7 +3,6 @@ from apscheduler.schedulers.background import BackgroundScheduler
 import requests
 from bs4 import BeautifulSoup
 
-
 # crawling job
 def job_crawling():
     print('start crawling')
@@ -11,17 +10,25 @@ def job_crawling():
     #param = '?page=2'
     response = requests.get(url)
 
-    soup = BeautifulSoup(response.text, 'html.parser')
-
-    print(soup)
-
-    titles = soup.select('strong.tit_thumb > a')
-    title_len = len(titles)
-    print(title_len)
-    for i in range(0, title_len):
-        print(titles[i].text)
+    return BeautifulSoup(response.text, 'html.parser')
 
 # parse
+def parse_daum_digital(html):
+    titles = html.select('strong.tit_thumb > a')
+
+    title_len = len(titles)
+    for i in range(0, title_len):
+        if match_word(titles[i].text):
+            print(titles[i].text)
+
+# match
+words = ['국', '빅']
+def match_word(text):
+    for word in words:
+        if word in text:
+            return True
+    return False
+
 # save at Redis
 
 
@@ -36,4 +43,5 @@ def job_crawling():
 #     time.sleep(1)
 
 if __name__ == '__main__':
-    job_crawling()
+    html = job_crawling()
+    parse_daum_digital(html)
