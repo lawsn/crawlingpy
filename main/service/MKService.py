@@ -10,24 +10,26 @@ from apscheduler.schedulers.blocking import BlockingScheduler
 def crawl():
     url = getUrl()
     bs = getHtml(url)
-    articles = bs.select('strong.tit_thumb > a')
+    articles = bs.select('table.table_6  td.title > a')
     # for article in articles:
     #     print('{} <> {}'.format(article.text, article['href']))
 
-    dicts = list(filter(lambda d: '코인' in d.text, articles))
+    dicts = list(filter(lambda d: '삼성' in d.text, articles))
     datas = {}
     for dict in dicts:
-        datas[dict.text] = dict['href']
+        datas[dict.text] = 'https:' + dict['href']
 
     if len(datas) > 0:
         save(datas)
 
 # parsing
 def getUrl():
-    return 'https://news.daum.net/breakingnews/digital{}'.format('')
+    return 'https://vip.mk.co.kr/newSt/news/news_list.php{}'.format('?sCode=21')
 
 def getHtml(url):
-    return BeautifulSoup(requests.get(url).text, 'html.parser')
+    r = requests.get(url)
+    # return BeautifulSoup(requests.get(url).text, 'html.parser')
+    return BeautifulSoup(r.content.decode('euc-kr', 'replace'), 'html.parser')
 
 
 # call extractor
@@ -50,4 +52,5 @@ def logic():
     crawl()
 
 if __name__ == '__main__':
-    sched.start()
+    # sched.start()
+    crawl()
