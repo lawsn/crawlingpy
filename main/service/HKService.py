@@ -23,8 +23,8 @@ def crawl():
 
     print(datas)
 
-    # if len(datas) > 0:
-    #     save(datas)
+    if len(datas) > 0:
+        save(datas)
 
 # parsing
 def getUrl():

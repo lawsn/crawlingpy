@@ -19,6 +19,8 @@ def crawl():
     for dict in dicts:
         datas[dict.text] = dict['href']
 
+    print(datas)
+
     if len(datas) > 0:
         save(datas)
 
@@ -50,4 +52,5 @@ def logic():
     crawl()
 
 if __name__ == '__main__':
-    sched.start()
+    # sched.start()
+    crawl()
